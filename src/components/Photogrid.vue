@@ -19,9 +19,9 @@ export default {
 </script>
 
 <style scoped>
-.container{
-    margin: 0;
-    max-width: 100vw;
+/* .container{ */
+    /* margin: 0; */
+    /* max-width: 100vw; */
     /* opacity: 0.5; */
-}
+/* } */
 </style>

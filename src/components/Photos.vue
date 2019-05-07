@@ -2,7 +2,7 @@
     <div class=" col-xl-3 col-lg-4 col-md-6 d-flex flex-fill">
         <figure class="figure" data-toggle="modal" data-target="#modalCenter" @click="$emit('set-currentItem', photo)"  v-bind:style="{backgroundImage: 'url(' + photo.url + ')'}">
             <!-- <img :src= photo.url class="figure-img img-fluid rounded" alt="..."> -->
-            <figcaption class="figure-caption"></figcaption>
+            <!-- <figcaption class="figure-caption">{{photo.text}}</figcaption> -->
         </figure>
     </div>
 </template>
@@ -24,5 +24,7 @@ figure{
     background-position: center;
     background-repeat: no-repeat;
     height: inherit;
+    width: inherit;
+    margin: 1rem 0;
 }
 </style>
