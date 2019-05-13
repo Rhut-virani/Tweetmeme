@@ -1,16 +1,24 @@
 <template>
-    <div class=" col-xl-3 col-lg-4 col-md-6 d-flex flex-fill">
-        <figure class="figure" data-toggle="modal" data-target="#modalCenter" @click="$emit('set-currentItem', photo)"  v-bind:style="{backgroundImage: 'url(' + photo.url + ')'}">
-            <!-- <img :src= photo.url class="figure-img img-fluid rounded" alt="..."> -->
-            <!-- <figcaption class="figure-caption">{{photo.text}}</figcaption> -->
-        </figure>
-    </div>
+  <div class=" col-xl-3 col-lg-4 col-md-6 d-flex flex-fill">
+    <figure
+      class="figure"
+      data-toggle="modal"
+      data-target="#modalCenter"
+      :style="{backgroundImage: 'url(' + photo.url + ')'}"
+      @click="$emit('set-currentItem', photo)"
+    />
+  </div>
 </template>
 
 <script>
 export default {
     name: 'Photos',
-    props: ["photo"]
+    props: {
+        photo: {
+                type: Object,
+                default: function () { return {} },
+        },
+      }
 }
 </script>
 

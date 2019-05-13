@@ -1,41 +1,32 @@
 <template>
   <div id="app">
-    <Nav v-on:getMemes="getMemes"/>
+    <!-- Search Bar -->
+    <Nav @getMemes="getMemes" />
+
     <!-- Modal -->
-    <div class="modal fade mymodal" id="modalCenter" tabindex="-1" role="dialog" aria-labelledby="modalCenterTitle" aria-hidden="true">
-      <button type="button" class="close" id="xclose" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="modalLongTitle">{{currentItem.text}}</h5>
-          </div>
-          <div class="modal-body">
-            <a target="blank" :href= currentItem.url>
-              <img :src= currentItem.url alt="" srcset="" class="modalimg">
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Modal :current-item="currentItem" />
+
+    <!-- Photogrid -->
     <transition name="fade">
-      <Photogrid v-if="isShowing" :photos = "imgUrl" v-on:set-currentItem="setCurrentItem"/>
+      <Photogrid
+        v-if="isShowing"
+        :photos="imgUrl"
+        @set-currentItem="setCurrentItem"
+      />
     </transition>
   </div>
 </template>
 
 <script>
-import Nav from './components/Nav.vue'
-import Photogrid from './components/Photogrid.vue'
-import axios from 'axios';
+import Nav from './components/Nav.vue';
+import Modal from './components/Modal.vue'
+import Photogrid from './components/Photogrid.vue';
 import Twit from 'twit';
+import { isArray } from 'util';
 
 var   max_id = 0,
-      temp = "news",
-      type= "mixed",
+      temp = "News",
       query = "",
-      lang = "en",
       tobject = { 
           consumer_key:         'mRS2Oj1xwemPhQyLPGK1xbkGN',
           consumer_secret:      'bXrlMg1cEKxgG7CQ17wtf4hZtygzKyOpETjevsU7BNmXSCopIX',
@@ -43,83 +34,106 @@ var   max_id = 0,
           access_token_secret:  'rspNbbMIfvyg7ja1IL9HD0vKOJbz91tw9Pfpddq3rAhAG',
           timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
         },
+      date = new Date(),
+      hours = date.getHours(),
+      dataurl = [],
       T = new Twit(tobject);
     
 export default {
-  name: 'app',
+  name: 'App',
   components: {
     Nav,
+    Modal,
     Photogrid,
   },
   data(){
     return{
       currentItem: {},
       imgUrl : [],
-      dataurl: [],
+      // dataurl: [],
       isShowing: true,
   }
   },
-  created (){
-    this.getMemes(temp);
+  mounted: function (){
+    if(!!localStorage.data && (parseInt(localStorage.time) === hours)){
+      this.imgUrl = localStorage.data;
+    }
+    else{
+      this.getMemes(temp);
+    }
   },
   methods:{
-    flatenarr() {
-        var newarray = this.dataurl.flat();
-        this.imgUrl = newarray.map(function (e,i,a){
-              if(e.extended_entities.media.length){
-                return{
-                    id: e.id,
-                    text: e.full_text,
-                    url: e.extended_entities.media[0].media_url,
-                  }
-              }
-              return;
-        }),
+    flatenarr: function (){
+      const newarray = dataurl.flat();
+      let ans = true;
+      let copy = [...newarray].map((e,index)=>{
+          ans = (!!e.entities.media.length && !e.possibly_sensitive) ? true : false;
+          let x = e.extended_entities.media[0].media_url
+          if(true){
+            return{
+              id: e.id + Math.floor(Math.random() * (index) + (index + 10)),
+              text: e.full_text,
+              url: x,
+            }
+          }
+      });
+      this.imgUrl = copy;
       this.isShowing = true;
+      if(localStorage.data){
+        localStorage.time = hours;
+        localStorage.data = this.imgUrl;
+      }
     },
-    resultpromise(){
+    resultpromise: function(){
         return (data) => {
           if(data.data.statuses.length === 0){
             throw "error";
           }
-          this.dataurl.push(data.data.statuses);
+          dataurl.push(...data.data.statuses);
           max_id = data.data.statuses[data.data.statuses.length - 1].id;
         }
     },
-    promise(){
-        return (data)=>{
+    promise: function(){
+        return ()=>{
           if(max_id){
               return T.get(
             'search/tweets', 
-                {q: query, count: 1000, max_id: max_id, tweet_mode:"extended", result_type:"mixed", lang:"en" }
+                {q: query, count: 100, max_id: max_id, tweet_mode:"extended", result_type:"mixed", lang:"en" }
             )}
-            }
+          }
     },
-    getMemes(text) {
+    getMemes: function (text){
       this.isShowing = false;
-      this.dataurl = [];
+      dataurl = [];
       query = `${text} filter:images -filter:retweets`;
       T
       .get(
           'search/tweets', 
           {q: query, count: 100 , tweet_mode:"extended", result_type:"mixed", lang:"en" }
       )
-      .catch((error)=>{ console.log(error);})
+      .catch((error)=>{
+        console.log(error);})
+      .then(this.resultpromise())
+      .catch((error)=>{
+        console.log(error);})
+      .then(this.promise())
+      .catch((error)=>{
+        console.log(error);})
       .then(this.resultpromise())
       .then(this.promise())
-      .catch((error)=>{ console.log(error);})
+      .catch((error)=>{
+        console.log(error);})
       .then(this.resultpromise())
-      // .then(this.promise())
-      // .catch((error)=>{ console.log(error);})
-      // .then(this.resultpromise())
-      // .then(this.promise())
-      // .catch((error)=>{ console.log(error);})
-      // .then(this.resultpromise())
-      // .catch((error)=>{ console.log(error);})
+      .then(this.promise())
+      .catch((error)=>{
+        console.log(error);})
+      .then(this.resultpromise())
+      .catch((error)=>{
+        console.log(error);})
       .then(this.flatenarr);
 
     },
-    setCurrentItem(photo) {
+    setCurrentItem: function (photo){
       this.currentItem = photo;
     }
   }
@@ -127,35 +141,6 @@ export default {
 </script>
 
 <style>
-.modalimg{
-  width: 100%;
-  max-height: 50vh;
-  object-fit: contain;
-}
-.mymodal{
-  color: #fff;
-  overflow: hidden;
-}
-.modal-header{
-  text-align: center;
-}
-#xclose{
-  position: absolute;
-  top: 10%;
-  right: 10%;
-  color: #eeeeee;
-  opacity: 1;
-}
-#modalCenter{
-  background-color: #000000d4;
-}
-.mymodal .modal-content{
-  background-color: black;
-}
-.modal-footer , .modal-header{
-  border: none !important;
-}
-
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.25s ease-out;
 }

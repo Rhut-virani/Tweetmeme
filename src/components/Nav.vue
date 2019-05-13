@@ -1,13 +1,27 @@
 <template>
   <div class="main">
-      <div class="form" v-on:submit="submitform">
-        <form action="" id="searchbox">
-            <input v-model="message" type="text"  placeholder="Search" required>
-            <button type="submit" class="submit">
-                <i class="fas fa-search"></i>
-            </button>  
-        </form>
-      </div>
+    <div
+      class="form"
+      @submit="submitform"
+    >
+      <form
+        id="searchbox"
+        action=""
+      >
+        <input
+          v-model="message"
+          type="text"
+          placeholder="Search"
+          required
+        >
+        <button
+          type="submit"
+          class="submit"
+        >
+          <i class="fas fa-search" />
+        </button>  
+      </form>
+    </div>
   </div>
 </template>
 
@@ -42,6 +56,8 @@ export default {
   width: 50vw;
   height: 10vh;
   transform: translate(50%, 50%);
+  position: fixed;
+  z-index: 100;
 }
 #searchbox .focus {
     box-shadow: 0 3px 4px rgba(0, 0, 0, 0.15);

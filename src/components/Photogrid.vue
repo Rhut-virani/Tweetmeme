@@ -1,9 +1,14 @@
 <template>
-    <div class="container">
-        <div class="row">
-            <Photos v-for="photo in photos" :photo="photo" :key="photo.id" v-on:set-currentItem="$emit('set-currentItem', photo)"/>
-        </div>
+  <div class="container">
+    <div class="row">
+      <Photos
+        v-for="(photo, ivalue) in photos"
+        :key="`${ivalue}-${photo.id}`"
+        :photo="photo"
+        @set-currentItem="$emit('set-currentItem', photo)"
+      />
     </div>
+  </div>
 </template>
 
 <script>
@@ -13,15 +18,16 @@ export default {
     components: {
         Photos,
     },
-    props: ["photos"]
+    props: {
+        photos: {
+                type: Array,
+                default: function () { return [] },
+        },
+    }
 
 }
 </script>
 
 <style scoped>
-/* .container{ */
-    /* margin: 0; */
-    /* max-width: 100vw; */
-    /* opacity: 0.5; */
-/* } */
+
 </style>
