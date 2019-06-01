@@ -1,14 +1,20 @@
 <template>
   <div class="footer">
-    <div class="prev"
-        @click="$emit('get-prev')"
-        :class="{'disabled':(next <= 0)}"
-        :disabled="true"
-    > Prev</div>
-    <div class="next" 
-        v-on:click="$emit('get-next')"
-        :class="{'disabled':(next >= (dataurl.length-25))}"
-    >Next</div>
+    <div
+      class="prev"
+      :class="{'disabled':(next <= 0)}"
+      :disabled="true"
+      @click="$emit('get-prev')"
+    >
+      Prev
+    </div>
+    <div
+      class="next" 
+      :class="{'disabled':(next >= (dataurl.length-25))}"
+      @click="$emit('get-next')"
+    >
+      Next
+    </div>
   </div>
 </template>
 
@@ -23,7 +29,7 @@ export default {
     },
     dataurl:{
       type: Array,
-      defualt: [],
+      defualt: [''],
     }
   }
 }

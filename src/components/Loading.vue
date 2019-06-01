@@ -1,9 +1,12 @@
 <template>
-    <!-- <transition> -->
-    <div class="loading" v-if="isLoading">
-        <div class="lds-dual-ring loadingText"></div>      
-    </div>
-    <!-- </transition> -->
+  <!-- <transition> -->
+  <div 
+    v-if="isLoading"
+    class="loading"
+  >
+    <div class="lds-dual-ring loadingText" />      
+  </div>
+  <!-- </transition> -->
 </template>
 <script>
 export default {

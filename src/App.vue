@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-  <!-- Search Bar -->
-  <Nav @getMemes="getMemes" />
+    <!-- Search Bar -->
+    <Nav @getMemes="getMemes" />
 
     <!-- Modal -->
     <Modal :current-item="currentItem" />
@@ -17,21 +17,20 @@
     </transition>
     <transition>
       <Loading 
-          :isLoading="isLoading"
+        :is-loading="isLoading"
       />
     </transition>
 
     <!-- Next -->
     <transition name="fade">
       <Footer 
-          v-if="isShowing"
-          :next="next"
-          :dataurl="dataurl"
-          @get-next="getnext"
-          @get-prev="getprev"
+        v-if="isShowing"
+        :next="next"
+        :dataurl="dataurl"
+        @get-next="getnext"
+        @get-prev="getprev"
       />
     </transition>
-
   </div>
 </template>
 
@@ -47,10 +46,10 @@ import { constants } from 'crypto';
 import axios from 'axios';
 
 
-let   date = new Date(),
-      hours = date.getHours(),
-      $axios = axios;
-      baseUrl = window.location.hostname.includes('localhost') ? ("http://localhost:5000") : '';
+let date = new Date(),
+				hours = date.getHours(),
+				$axios = axios,
+				baseUrl = window.location.hostname.includes('localhost') ? ("http://localhost:5000") : '';
 
     
 export default {
