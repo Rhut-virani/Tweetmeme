@@ -23,6 +23,10 @@ export default {
                 type: Array,
                 default: function () { return [] },
         },
+        isShowing: {
+            type: Boolean,
+            default: false,
+        }
     }
 
 }

@@ -26,7 +26,8 @@ app.use(serveStatic(__dirname + "/dist"));
 
 let dataurl = [],
     imgUrl= [],
-    temp = "dhoni",
+    originaldata= [],
+    temp = "news",
     query = "",
     tobject = { 
         consumer_key:         'JVXJ5L7963GEa5EM9IKNPd3iQ',
@@ -47,7 +48,7 @@ app.get('/data', (req, res)=>{
             await res.send(result);
         }
         else{
-            res.send(imgUrl);
+            res.send(originaldata);
         }
     }
     sendata();
@@ -56,34 +57,22 @@ app.get('/data', (req, res)=>{
 const flatenarr = (error) =>{
         if(!error){
             const newarray = Array.from(dataurl);
-            console.log(newarray[0].entities.media[0].media_url);
-            let ans;
-            let x ;
-            // imgUrl = newarray.filter( (tweet,index) => {
-            //     // ans = (!!e.entities.media.length && !e.possibly_sensitive) ? true : false;
-            //     // x = e.extended_entities.media[0].media_url;
-            //     if(true){
-            //         return{
-            //         id: tweet.id + Math.floor(Math.random() * (index) + (index + 10)),
-            //         text: tweet.full_text,
-            //         url: tweet.entities.media.media_url,
-            //         }
-            //     }
-            // });
-            let copy  = newarray.map((tweet,index) => {
-                // ans = (!!e.entities.media.length && !e.possibly_sensitive) ? true : false;
-                // x = e.extended_entities.media[0].media_url;        
-                if(index === 1){
-                    console.log(tweet);
-                }            
-                    imgUrl.push(
-                        [id= tweet.id + Math.floor(Math.random() * (index) + (index + 10)),
-                        text= tweet.full_text ,
-                        url = tweet.entities.media.media_url]
-                        );
-            })
+            let copy = newarray.map( (tweet,index, arr) => {
+                if(!!tweet.extended_entities && !tweet.possibly_sensitive){
+                    return{
+                    id: tweet.id + Math.floor(Math.random() * (index) + (index + 10)),
+                    text: tweet.full_text,
+                    url: tweet.extended_entities.media[0].media_url,
+                    }
+                }
+            });
+            imgUrl = copy.filter((element)=>{if(!null){ return element }});
+            if(originaldata.length === 0){
+                originaldata = imgUrl;
+            }
         }
         else if(error){
+            imgUrl = [];
             console.log(error);
         }
   };
@@ -94,9 +83,8 @@ const resultpromise = ()=>{
     if(data.data.statuses.length === 0){
         throw `error${max_id}`;
     }
-    let result = JSON.stringify(data.data.statuses)
-    dataurl.push(...result);
-    max_id = result[data.data.statuses.length - 1].id;
+    dataurl.push(...data.data.statuses);
+    max_id = data.data.statuses[data.data.statuses.length - 1].id;
     }
 };
 const promise = () => {
@@ -128,8 +116,10 @@ async function getMemes(text){
             flatenarr()
         })
         .catch((error)=>{
-            console.log(error);
+            // console.log(error);
+            flatenarr(error)
         })
+
         return await imgUrl;
 };
 

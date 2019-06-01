@@ -15,17 +15,23 @@
         @set-currentItem="setCurrentItem"
       />
     </transition>
+    <transition>
+      <Loading 
+          :isLoading="isLoading"
+      />
+    </transition>
 
     <!-- Next -->
     <transition name="fade">
-    <Footer 
-        v-if="isShowing"
-        :next="next"
-        :dataurl="dataurl"
-        @get-next="getnext"
-        @get-prev="getprev"
-    />
+      <Footer 
+          v-if="isShowing"
+          :next="next"
+          :dataurl="dataurl"
+          @get-next="getnext"
+          @get-prev="getprev"
+      />
     </transition>
+
   </div>
 </template>
 
@@ -33,6 +39,7 @@
 import Nav from './components/Nav.vue';
 import Modal from './components/Modal.vue'
 import Footer from './components/Footer.vue'
+import Loading from './components/Loading.vue'
 import Photogrid from './components/Photogrid.vue';
 import Twit from 'twit';
 import { isArray } from 'util';
@@ -51,23 +58,26 @@ export default {
     Modal,
     Photogrid,
     Footer,
+    Loading,
   },
   data(){
     return{
       currentItem: {},
       imgUrl : [],
       dataurl: [],
-      isShowing: true,
+      isShowing: false,
+      isLoading: false,
       next: 0,
   }
   },
   mounted: function () {
     setTimeout(() => {
-      this.getMemes();      
-    }, 2000);
+      this.getMemes();            
+    }, 500);
   },
   methods:{
     sortresults: function(){
+      if(this.dataurl.length>0){
         const copy = Array.from(this.dataurl);
         this.imgUrl = copy.filter((ele, i)=>{
            if(i>this.next && i<(this.next+25)){
@@ -75,6 +85,13 @@ export default {
            }
         });
         this.isShowing = true;
+        this.isLoading = false;
+      }
+      else{
+        alert("No Results Found");
+        this.isShowing = true;
+        this.isLoading = false;
+      }
     },
     getnext: function(){
       this.next = this.next + 25;
@@ -89,9 +106,9 @@ export default {
     getMemes: function (text){
       this.next = 0;
       this.isShowing = false;
+      this.isLoading = true;
       $axios.get('http://localhost:5000/data', { params:{search:text}})
       .then((result) => {
-        console.log(result.data);
         this.dataurl = result.data;
       }) 
       .then(() => {
