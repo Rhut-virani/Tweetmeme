@@ -28,7 +28,8 @@ div{
     min-height: 35vh;
 }
 figure{
-    background-size: cover;
+    -webkit-background-size: cover;
+            background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     height: inherit;

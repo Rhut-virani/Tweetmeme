@@ -41,7 +41,9 @@ export default {
   height: 10vh;
   position: relative;
   left: 50%;
-  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+          transform: translateX(-50%);
   margin-top: 2%;
   text-align: center;
 }
@@ -57,20 +59,6 @@ export default {
   user-select: none; 
   font-size: 1.2rem;
   margin-right: 5%;
-}
-
-@media (min-width: 1199) {
-  .prev, .next {
-    position: fixed; 
-    top: 50%;
-    transform: translateY(-50%);
-  }
-  .prev{
-    left: 0;
-  }
-  .next{
-    right: 0;
-  }
 }
 
 .disabled{

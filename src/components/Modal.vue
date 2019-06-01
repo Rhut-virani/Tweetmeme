@@ -64,7 +64,8 @@ export default {
 .modalimg{
   width: 100%;
   max-height: 50vh;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .mymodal{
   color: #fff;
@@ -89,5 +90,4 @@ export default {
 .modal-footer , .modal-header{
   border: none !important;
 }
-
 </style>

@@ -127,11 +127,12 @@ export default {
 
 <style>
 .fade-enter-active, .fade-leave-active {
+  -webkit-transition: opacity 0.1s ease-out;
+  -o-transition: opacity 0.1s ease-out;
   transition: opacity 0.1s ease-out;
 }
 
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
-
 </style>
