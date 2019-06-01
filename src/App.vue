@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <!-- Search Bar -->
-    <Nav @getMemes="getMemes" />
+  <!-- Search Bar -->
+  <Nav @getMemes="getMemes" />
 
     <!-- Modal -->
     <Modal :current-item="currentItem" />
@@ -50,6 +50,8 @@ import axios from 'axios';
 let   date = new Date(),
       hours = date.getHours(),
       $axios = axios;
+      baseUrl = window.location.hostname.includes('localhost') ? ("http://localhost:5000") : '';
+
     
 export default {
   name: 'App',
@@ -107,7 +109,7 @@ export default {
       this.next = 0;
       this.isShowing = false;
       this.isLoading = true;
-      $axios.get('http://localhost:5000/data', { params:{search:text}})
+      $axios.get(`${baseUrl}/data`, { params:{search:text}})
       .then((result) => {
         this.dataurl = result.data;
       }) 
