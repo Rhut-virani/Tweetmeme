@@ -2,7 +2,8 @@
 const express = require('express'),
       app = express(),
       bodyParser = require('body-parser'),
-      Twit = require('twit');
+      Twit = require('twit'),
+      config = require('./config')
 var   serveStatic = require('serve-static');
 
 const PORT = process.env.PORT || 5000;
@@ -24,19 +25,16 @@ const PORT = process.env.PORT || 5000;
 app.use(serveStatic(__dirname + "/dist"));
 
 
+
 let dataurl = [],
     imgUrl= [],
     originaldata= [],
     temp = "news",
-    query = "",
-    tobject = { 
-        consumer_key:         'JVXJ5L7963GEa5EM9IKNPd3iQ',
-        consumer_secret:      'vSd4uL6qrGFhTnw2v0VjFhIPatHfoy2gti5W28jGcuKoEXM2Ei',
-        access_token:         '519379540-MgU49G2LXZ0xp4nJMpdXyQMyhNycqt9mKJn3aKB4',
-        access_token_secret:  'b6Q4dTKSkcMXLsNd0XE2PxodyXifGS3sGxs7NrbsdoE0V',
-        timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
-    },
-    T = new Twit(tobject);
+    query = "";
+
+const 
+    tobject = config.twitkeys; // Your API Keys  ##############
+    const T = new Twit(tobject);
 
     
 

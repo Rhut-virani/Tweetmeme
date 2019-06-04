@@ -74,7 +74,7 @@ export default {
   mounted: function () {
     setTimeout(() => {
       this.getMemes();            
-    }, 500);
+    }, 100);
   },
   methods:{
     sortresults: function(){
